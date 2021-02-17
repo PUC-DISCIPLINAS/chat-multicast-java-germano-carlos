@@ -1,12 +1,14 @@
+import java.io.IOException;
+import java.net.*;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         // Inicializa o Servidor Padrão
         ServidorUDP serverPrincipal = new ServidorUDP();
-        Thread thread = new Thread(serverPrincipal);
-        thread.start();
+        /*Thread thread = new Thread(serverPrincipal);
+        thread.start();*/
 
         boolean loop = true;
         do {
@@ -28,6 +30,7 @@ public class Main {
                     break;
                 case 2:
                     serverPrincipal.criarSala();
+                    loop = false;
                     break;
                 case 3:
                     serverPrincipal.entrarSala();

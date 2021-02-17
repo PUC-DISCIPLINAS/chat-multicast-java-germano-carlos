@@ -1,38 +1,18 @@
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.SocketException;
+import java.net.*;
 
-public class ServidorMultiCasting {
-    public static void main(String args[]) {
-        // args  prov� o conte�do da mensagem e o endere�o  do grupo multicast (p. ex. "228.5.6.7")
-
-        MulticastSocket mSocket = null;
-
-        try {
-            InetAddress groupIp = InetAddress.getByName(args[1]);
-
-            mSocket = new MulticastSocket(6789);
-            mSocket.joinGroup(groupIp);
-
-            byte[] message = args[0].getBytes();
-            DatagramPacket messageOut = new DatagramPacket(message, message.length, groupIp, 6789);
-            mSocket.send(messageOut);
-            byte[] buffer = new byte[1000];
-            for (int i = 0; i < 3; i++) { // get messages from others in group
-                DatagramPacket messageIn = new DatagramPacket(buffer, buffer.length);
-                mSocket.receive(messageIn);
-                System.out.println("Recebido:" + new String(messageIn.getData()).trim());
-            }
-            mSocket.leaveGroup(groupIp);
-        } catch (SocketException e) {
-            System.out.println("Socket: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("IO: " + e.getMessage());
-        } finally {
-            if (mSocket != null)
-                mSocket.close();
-        }
+public class ServidorMultiCasting extends Thread {
+    public static void sendUDPMessage(String message, String ipAddress, int port) throws IOException {
+        DatagramSocket socket = new DatagramSocket();
+        InetAddress group = InetAddress.getByName(ipAddress);
+        byte[] msg = message.getBytes();
+        DatagramPacket packet = new DatagramPacket(msg, msg.length, group, port);
+        socket.send(packet);
+        socket.close();
+    }
+    public static void main(String[] args) throws IOException {
+        sendUDPMessage("This is a multicast messge", "228.5.2.7", 6789);
+        sendUDPMessage("This is the second multicast messge", "228.5.6.7", 6789);
+        sendUDPMessage("This is the third multicast messge", "228.5.6.7", 6789);
     }
 }
