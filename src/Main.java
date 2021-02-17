@@ -1,12 +1,11 @@
 import java.io.IOException;
-import java.net.*;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
         // Inicializa o Servidor Padrão
-        ServidorUDP serverPrincipal = new ServidorUDP();
+        MainController mainController = new MainController();
         /*Thread thread = new Thread(serverPrincipal);
         thread.start();*/
 
@@ -22,21 +21,23 @@ public class Main {
             System.out.println("0 - Sair e desconectar");
 
             Scanner s = new Scanner(System.in);
-            int opcao = s.nextInt();
+            int opcao = Integer.parseInt(s.nextLine());
 
             switch (opcao) {
                 case 1:
-                    serverPrincipal.listarSalas();
+                    mainController.listarSalas();
                     break;
                 case 2:
-                    serverPrincipal.criarSala();
-                    loop = false;
+                    mainController.criarSala();
                     break;
                 case 3:
-                    serverPrincipal.entrarSala();
+                    System.out.println("Informe o endereco MultiCast referente a sala desejada");
+                    String endereco = s.nextLine();
+                    mainController.entrarSala(endereco);
+                    loop = false;
                     break;
                 case 4:
-                    serverPrincipal.listarParticipantes();
+                    mainController.listarParticipantes();
                     break;
                 case 0:
                     loop = false;

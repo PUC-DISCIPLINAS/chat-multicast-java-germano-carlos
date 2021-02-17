@@ -10,12 +10,15 @@ public class Multicast implements Runnable {
     protected String ip;
     protected int port;
 
-    public Multicast(String ip, int port) {
+    public Multicast(String ip, int port, boolean startThread) {
         this.ip = ip;
         this.port = port;
 
-        Thread t = new Thread(this);
-        t.start();
+        if(startThread)
+        {
+            Thread t = new Thread(this);
+            t.start();
+        }
     }
 
     public void receiveUDPMessage(String ip, int port) throws IOException, IOException {

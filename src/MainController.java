@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.*;
 import java.util.*;
 
-public class ServidorUDP extends Thread {
+public class MainController extends Thread {
+
     protected DatagramSocket aSocket;
     protected DatagramPacket request;
     protected List<Sala> salasList = new ArrayList<Sala>();
@@ -41,16 +42,16 @@ public class ServidorUDP extends Thread {
     public void criarSala() {
         //Coleta as informações necessárias para a criação da sala
         try{
+            System.out.println("Para criar uma nova sala, precisaremos de coletar alguns dados");
+
             Participante p = this.coletarInformacoesParticipante();
             Sala s = this.coletarInformacoesSala();
             this.associaParticipanteSala(p,s);
 
             System.out.println("Sala '" + s.getId() + "|" +s.getNome() + "' - Criada com Sucesso");
-            System.out.println("Redirecionando para a sala criada...");
+            System.out.println("Volte ao menu principal e insira a nova sala para conexão");
 
             Thread.sleep(3000);
-
-            this.entrarSala();
         } catch (Exception e){
             System.out.println("Erro ao criar Sala: " + e.getMessage());
         }
@@ -58,13 +59,13 @@ public class ServidorUDP extends Thread {
     }
     private void associaParticipanteSala(Participante p, Sala s) {
         p.setSala(s);
-        this.participantesList.add(p);
-        this.salasList.add(s);
+        if(!participantesList.contains(p))
+            this.participantesList.add(p);
+        if(!salasList.contains(s))
+            this.salasList.add(s);
     }
     private Participante coletarInformacoesParticipante() {
         Scanner scannerDados = new Scanner(System.in);
-
-        System.out.println("Para criar uma nova sala, precisaremos de coletar alguns dados");
 
         System.out.println("Qual é o seu CPF? Favor inserir sem pontos e traços");
         String cpf = scannerDados.nextLine();
@@ -97,7 +98,7 @@ public class ServidorUDP extends Thread {
         System.out.println("Qual o nome da sua sala?");
         String nomeSala = scannerDados.nextLine();
 
-        return new Sala(InetAddress.getByName(enderecoMultiCast), nomeSala, new Multicast(InetAddress.getByName(enderecoMultiCast).getHostAddress(), 6789));
+        return new Sala(InetAddress.getByName(enderecoMultiCast), nomeSala, new Multicast(InetAddress.getByName(enderecoMultiCast).getHostAddress(), 6789, false));
     }
     private boolean validaEnderecoMultiCast(String enderecoMultiCast) {
         if(salasList.size() == 0)
@@ -105,13 +106,36 @@ public class ServidorUDP extends Thread {
         else
         {
             for(Sala s : salasList )
-                if(s.getNome().equals(enderecoMultiCast))
+                if(s.getId().getHostAddress().equals(enderecoMultiCast))
                     return true;
             return false;
         }
     }
-    public void entrarSala() {
+    public void entrarSala(String enderecoMultiCast) {
         Participante p = coletarInformacoesParticipante();
+        Sala s = this.procurarSalaPorId(enderecoMultiCast);
+
+        if(s != null) {
+            this.associaParticipanteSala(p,s);
+            Multicast m = new Multicast(enderecoMultiCast, 6789, true);
+        }
+        else
+            System.out.println("Não foi possível localizar a sala solicitada. Favor validar se a mesma existe");
+    }
+    private Sala procurarSalaPorId(String enderecoMultiCast) {
+        boolean existe = this.validaEnderecoMultiCast(enderecoMultiCast);
+
+        if(!existe)
+            return null;
+        else
+        {
+            for(Sala s : salasList )
+                if(s.getId().getHostAddress().equals(enderecoMultiCast))
+                    return s;
+
+        }
+
+        return null;
     }
     public void listarParticipantes() {}
 
