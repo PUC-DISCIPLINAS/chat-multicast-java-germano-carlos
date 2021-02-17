@@ -33,7 +33,7 @@ public class ServidorUDP extends Thread {
             System.out.println("Infelizmente nenhuma sala foi criada ainda. Volte ao menu e crie uma :)");
         else
             for (int i = 0; i < salasList.size(); i++ ) {
-                System.out.println(i+1 + "| Id da sala:" + salasList.get(i).getId() + "| Nome da sala:" + salasList.get(i).getNome());
+                System.out.println(i+1 + "| Id da sala:" + salasList.get(i).getId() + "| Nome da sala: " + salasList.get(i).getNome());
             }
     }
     public void criarSala() {
@@ -41,20 +41,28 @@ public class ServidorUDP extends Thread {
         try{
             Participante p = this.coletarInformacoesParticipante();
             Sala s = this.coletarInformacoesSala();
-        } catch (UnknownHostException e){
+            this.associaParticipanteSala(p,s);
+
+            System.out.println("Sala '" + s.getId() + "|" +s.getNome() + "' - Criada com Sucesso");
+        } catch (Exception e){
             System.out.println("UnknownHostException: " + e.getMessage());
         }
 
+    }
+    private void associaParticipanteSala(Participante p, Sala s) {
+        p.setSala(s);
+        this.participantesList.add(p);
+        this.salasList.add(s);
     }
     private Participante coletarInformacoesParticipante() {
         Scanner scannerDados = new Scanner(System.in);
 
         System.out.println("Para criar uma nova sala, precisaremos de coletar alguns dados");
         System.out.println("Qual é o seu nome?");
-        String nomeUsuario = scannerDados.next();
+        String nomeUsuario = scannerDados.nextLine();
 
         System.out.println("Qual é o seu CPF?");
-        String cpf = scannerDados.next();
+        String cpf = scannerDados.nextLine();
 
         return new Participante(cpf,nomeUsuario);
     }
@@ -66,7 +74,7 @@ public class ServidorUDP extends Thread {
         while(existeMultiCast)
         {
             System.out.println("Qual o endereço multicast desejado? Favor inserir no seguinte modelo: 228.5.6.7");
-            enderecoMultiCast = scannerDados.next();
+            enderecoMultiCast = scannerDados.nextLine();
             if(validaEnderecoMultiCast(enderecoMultiCast))
                 System.out.println("Endereço multicast já existente, caso deseje entrar nessa sala selecione a opção do menu anterior!");
             else
@@ -74,15 +82,20 @@ public class ServidorUDP extends Thread {
         }
 
         System.out.println("Qual o nome da sua sala?");
-        String nomeSala = scannerDados.next();
+        String nomeSala = scannerDados.nextLine();
 
         return new Sala(InetAddress.getByName(enderecoMultiCast), nomeSala);
     }
     private boolean validaEnderecoMultiCast(String enderecoMultiCast) {
-        for(Sala s : salasList )
-            if(s.getNome().equals(enderecoMultiCast))
-                return true;
-        return false;
+        if(salasList.size() == 0)
+            return false;
+        else
+        {
+            for(Sala s : salasList )
+                if(s.getNome().equals(enderecoMultiCast))
+                    return true;
+            return false;
+        }
     }
     public void entrarSala() {
 
