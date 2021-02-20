@@ -82,7 +82,8 @@ public class MainController extends Thread {
         }
         else if(dados.equals("Participante Inexistente")) {
             System.out.println("Participante não localizado, vamos criar um novo cadastro?");
-            this.coletarInformacoesParticipante();
+            String cpfPrimario = this.coletarInformacoesParticipante();
+            this.associaParticipanteSala(cpfPrimario, enderecoMultiCast);
             this.entrarSala(enderecoMultiCast);
         }
         else {
@@ -93,7 +94,10 @@ public class MainController extends Thread {
 
 
     }
-    public void listarParticipantes() {}
+    public void listarParticipantes() {
+        String ret = clientUDP.sendMessageUDPtoServerPrincipal("ListarParticipantes");
+        System.out.println(ret);
+    }
     private void capturaMensagens(String cpf, String nome, String multiCast) {
         System.out.println("Para conversar na sala, favor digitar logo abaixo");
         System.out.println("Caso queira sair do chat, digite /quit");

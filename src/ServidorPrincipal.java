@@ -1,8 +1,8 @@
-import javax.management.MBeanRegistration;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ServidorPrincipal extends Thread {
 
@@ -81,6 +81,8 @@ public class ServidorPrincipal extends Thread {
                 case "EntrarChat":
                     retorno = EntrarChat(p,s,mensagemParametros[1],mensagemParametros[2]);
                     break;
+                case "ListarParticipantes":
+                    retorno = ListarParticipantes(p);
                 default:
                     System.out.println("Não localizado nenhuma opção para isso");
             }
@@ -98,7 +100,7 @@ public class ServidorPrincipal extends Thread {
         else
         {
             for (int i = 0; i < salasList.size(); i++) {
-                t.append(i).append(1).append("| Id da sala:").append(salasList.get(i).getId()).append("| Nome da sala: ").append(salasList.get(i).getNome());
+                t.append(i+1).append("| Id da sala:").append(salasList.get(i).getId()).append("| Nome da sala: ").append(salasList.get(i).getNome()).append("\n");
             }
         }
 
@@ -153,4 +155,24 @@ public class ServidorPrincipal extends Thread {
 
         return p.getId() + ":" + p.getNome();
     }
+    private static String ListarParticipantes(List<Participante> lp) {
+        StringBuilder t = new StringBuilder();
+        if (lp.size() == 0)
+            return ("Nenhum participante foi criado ainda");
+        else
+        {
+            for (int i = 0; i < lp.size(); i++) {
+                t.append(i+1).append("| CPF Do participante:").append(lp.get(i).getId()).append("| Nome do Participante: ").append(lp.get(i).getNome());
+                if(lp.get(i).getSala() != null) {
+                    t.append("| Sala Inclusa :").append(lp.get(i).getSala().getNome()).append("\n");
+                } else {
+                    t.append("| Sala: O participante ainda não esta em nenhuma sala").append("\n");
+                }
+            }
+        }
+
+        return t.toString();
+    }
 }
+
+

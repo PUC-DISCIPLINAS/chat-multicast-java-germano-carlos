@@ -32,7 +32,6 @@ public class Main {
                     System.out.println("Informe o endereco MultiCast referente a sala desejada");
                     String endereco = s.nextLine();
                     mainController.entrarSala(endereco);
-                    loop = false;
                     break;
                 case 4:
                     mainController.listarParticipantes();
