@@ -4,12 +4,12 @@
 =================
 
    * [Sobre](#sobre)
-      * [Descrição do Projeto](#descr)
+      * [Descrição do Projeto](#Descrição do Projeto)
       * [Pré-requisitoss](#Pré-requisitos)
-      * [Classes](local-files)
-   * [Tecnologias](tecnologias)
-   * [Autor](#autor)
-   * [License](#license)
+      * [Classes](#Classes)
+   * [Tecnologias](#Tecnologias)
+   * [Autor](#Autor)
+   * [License](#License)
 
 <h4 align="center"> 
 	🚀 Projeto já finalizado !
