@@ -10,9 +10,7 @@ public class ServidorMultiCasting extends Thread {
         socket.send(packet);
         socket.close();
     }
-    public static void main(String[] args) throws IOException {
-        sendUDPMessage("This is a multicast messge", "228.5.2.7", 6789);
-        sendUDPMessage("This is the second multicast messge", "228.5.6.7", 6789);
-        sendUDPMessage("This is the third multicast messge", "228.5.6.7", 6789);
+    public static void initialize(String message, String ip, int port ) throws IOException {
+        sendUDPMessage(message, ip, port);
     }
 }

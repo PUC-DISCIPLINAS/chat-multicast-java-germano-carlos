@@ -6,8 +6,6 @@ public class Main {
 
         // Inicializa o Servidor Padrão
         MainController mainController = new MainController();
-        /*Thread thread = new Thread(serverPrincipal);
-        thread.start();*/
 
         boolean loop = true;
         do {

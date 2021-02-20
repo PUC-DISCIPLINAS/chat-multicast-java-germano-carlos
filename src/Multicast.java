@@ -7,6 +7,7 @@ import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
 public class Multicast implements Runnable {
+
     protected String ip;
     protected int port;
 
@@ -27,12 +28,11 @@ public class Multicast implements Runnable {
         InetAddress group = InetAddress.getByName(ip);
         socket.joinGroup(group);
         while (true) {
-            System.out.println("Waiting for multicast message...");
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
             socket.receive(packet);
             String msg = new String(packet.getData(), packet.getOffset(), packet.getLength());
-            System.out.println("[Multicast UDP message received] >> " + msg);
-            if ("OK".equals(msg)) {
+            System.out.println(msg);
+            if ("/quit".equals(msg)) {
                 System.out.println("No more message. Exiting : " + msg);
                 break;
             }
