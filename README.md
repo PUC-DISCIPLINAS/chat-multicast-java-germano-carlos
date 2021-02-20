@@ -5,7 +5,7 @@
 
    * [Sobre](#sobre)
       * [Descrição do Projeto](#Descrição do Projeto)
-      * [Pré-requisitoss](#Pré-requisitos)
+      * [Pré-requisitos](#Pré-requisitos)
       * [Classes](#Classes)
    * [Tecnologias](#Tecnologias)
    * [Autor](#Autor)
