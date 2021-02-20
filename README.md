@@ -4,7 +4,7 @@
 =================
 
    * [Sobre](#sobre)
-      * [Descrição do Projeto](#Descrição do Projeto)
+      * [Descrição do Projeto](#Descrição)
       * [Pré-requisitos](#Pré-requisitos)
       * [Classes](#Classes)
    * [Tecnologias](#Tecnologias)
